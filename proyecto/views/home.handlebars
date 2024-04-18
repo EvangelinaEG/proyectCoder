@@ -1,0 +1,31 @@
+<main class="container">
+    <h1>Listado de Productos </h1>
+    <div id="listProducts">
+        <div id="productos">
+             {{#if contproducts}}
+                <h2 class="text-center p-5">Listado de productos</h2>
+                <div class="d-flex justify-content-between">
+                    {{#each products}}
+                        <div class="card d-flex p-2 m-3 " style="width: 18rem;">
+                            <img src="{{ this.thumbnail }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ this.title }}</h5>
+                                <p class="card-text">{{ this.description }}</p>
+                            </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><b>Codigo: </b> #{{ this.code }}</li>
+                                    <li class="list-group-item"><b>Stock: </b>{{ this.stock }}</li>
+                                    <li class="list-group-item"><b>Estado: </b>{{ this.status }}</li>
+                                    <li class="list-group-item"><b>Precio: </b>${{ this.price }}</li>
+                                </ul>
+                            </div>
+                    {{/each}}
+                </div>
+            {{else}}
+                <h2>No hay productos para mostrar.</h2>
+            {{/if}}
+        </div>
+    </div>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>

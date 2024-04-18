@@ -1,0 +1,70 @@
+<main class="container">
+    <h1>Productos </h1>
+    <div >
+        <form class="form-control" method="post" enctype="multipart / form-data" id="producto">
+            <div class="row">
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="title" id="title" placeholder="Ingrese un titulo" required />
+                </div>
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="description" id="description" placeholder="Ingrese una descripcion" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="price" id="price" placeholder="Ingrese un precio" required/>
+                </div>
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="code" id="code" placeholder="Ingrese un codigo unico de producto" required/>
+                </div>
+            </div>
+             <div class="row">
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="stock" id="stock" placeholder="Ingrese un stock" required />
+                </div>
+                <div class="col p-3">
+                    <input class="form-control" type="text" name="category" id="category" placeholder="Ingrese una categoria" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col p-3">
+                    <select class="form-select" name="status" aria-label="Default select">
+                        <option selected disabled>Seleccione un estado</option>
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col p-3">
+                    <input class="form-control" type="file" name="thumbnail" id="thumbnail" multiple/>
+                </div>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Agregar producto">
+        </form>
+        <div id="productos">
+             {{#if contproducts}}
+                <h2 class="text-center p-5">Listado de productos</h2>
+                <div class="d-flex justify-content-between">
+                    {{#each products}}
+                        <div class="card d-flex p-2 m-3 " style="width: 18rem;">
+                            <img src="{{ this.thumbnail }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ this.title }}</h5>
+                                <p class="card-text">{{ this.description }}</p>
+                            </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><b>Codigo: </b> #{{ this.code }}</li>
+                                    <li class="list-group-item"><b>Stock: </b>{{ this.stock }}</li>
+                                    <li class="list-group-item"><b>Estado: </b>{{ this.status }}</li>
+                                    <li class="list-group-item"><b>Precio: </b>${{ this.price }}</li>
+                                </ul>
+                            </div>
+                    {{/each}}
+                </div>
+            {{else}}
+                <h2>No hay productos para mostrar.</h2>
+            {{/if}}
+        </div>
+    </div>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>
