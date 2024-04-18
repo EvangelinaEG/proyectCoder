@@ -1,15 +1,13 @@
 import { Router } from 'express'
 import express from 'express'
 import ProductManager from '../file/productManager.js'
-import { productsSocket } from '../server.js'
 const path = '../proyecto/file/Productos.json'
-
+import bodyParser from 'body-parser'
 const router = Router()
-
 
 router.use(express.json())
 router.use(express.urlencoded({extended: true}))
-
+router.use(bodyParser.urlencoded({ extended: false }))
 
 const Products = new ProductManager(path)
 
@@ -19,7 +17,21 @@ const products = async () =>{
 }
 products();
 
+router.post('/realtimeproducto', async (req, res) => {
+    console.log(req.body.title)
+        const { socketServer } = req
+        socketServer.on('connection', socket => {
+            socket.on("product", async data=>{
+            const result = await Products.addProducts(data)
+            
+                socketServer.emit("message-server", result.msg)
+            })
+        }) 
+        
+    }) 
+
 router.get('/realtimeproductos', async (req, res) => {
+    
     const result = await Products.getProducts()
     let keys = Object.keys(result);
     if(  result.status == "error" ) return res.status(404).send({status: 'error', error: result.msg })
@@ -33,28 +45,15 @@ router.get('/', async (req, res) => {
     const result = await Products.getProducts()
     let keys = Object.keys(result);
     if(  result.status == "error" ) return res.status(404).send({status: 'error', error: result.msg })
-    res.render('realTimeProducts', { 
+    res.render('home', { 
     "products": result.msg,
     "contproducts" :  keys.length > 0
     })
 })
 
-router.post('/realtimeproductos', productsSocket,  async (req, res) => {
-    console.log(req)
-    const result = await Products.addProducts(req)
-    let keys = Object.keys(result);
-    if(  result.status == "error" ) return res.status(404).send({status: 'error', error: result.msg })
-    res.render('realTimeProducts', { 
-    "products": result.msg,
-    "contproducts" :  keys.length > 0
-    })
-    productsSocket.on('connection', socket =>{
-        socket.on("product", async data=>{
-            const result = await Products.addProduct(data)  
-            
-            socketServer.emit("message-server", result.msg)
-        })
-    }) 
-})
-/* */
+
+
+
+
+
 export default router

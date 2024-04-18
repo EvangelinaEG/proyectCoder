@@ -14,6 +14,7 @@ form.addEventListener("submit", (event) =>{
     } 
     
     data.append("thumbnails", JSON.stringify(thumbnails))
+    
    
     if(data.get('title') === '' || data.get('description') === '' || data.get('code') === '' || data.get('price') === '' || data.get('status') === '' || data.get('stock') === '' || data.get('category') === ''  ){
         Swal.fire({
@@ -27,6 +28,7 @@ form.addEventListener("submit", (event) =>{
         })
         
     }else{
+        
         socket.emit("product", {
             'title': data.get('title'),
             'description': data.get('description'),

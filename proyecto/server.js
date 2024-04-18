@@ -6,7 +6,8 @@ import { __dirname } from './utils.js'
 //import { uploader } from './multer.js'
 import handlebars from 'express-handlebars' 
 import { Server } from 'socket.io'
-import  { productsSocket } from './utils/productsSocket.js'
+import productsSocket from './utils/productsSocket.js'
+import bodyParser from 'body-parser'
 
 //import { __dirname } from './utils.js'
 
@@ -24,6 +25,7 @@ app.use(productsSocket(io))
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname+'/public'))
 
 app.engine('handlebars', handlebars.engine());
@@ -32,6 +34,7 @@ app.set('views'. __dirname+'/views')
 app.set('view engine', 'handlebars')
 
 app.use('/', viewsRouter)
+
 // http://localhost:8080 + /api/carts
 app.use('/api/carts', cartsRouter)
 
