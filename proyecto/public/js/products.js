@@ -1,22 +1,30 @@
-const socket = io();
+const socket = io()
 const form = document.getElementById("producto")
 
 const productsList = document.getElementById('productos')
 //const datos = '';
 form.addEventListener("submit", (event) =>{
-    event.preventDefault()
+   
     const files = document.getElementById("thumbnail").files.length;
-    	const data = new FormData(event.target)
+    const title = document.getElementById("title").value
+    const description = document.getElementById("description").value
+    const price = document.getElementById("price").value
+    const status = document.getElementById("status").value
+    const stock = document.getElementById("stock").value
+    const code = document.getElementById("code").value
+    const category = document.getElementById("category").value
+
+    
         const thumbnails = []
      for (let i = 0; i < files; i++) {
         let url = '/uploads/'+document.getElementById('thumbnail').files[i].name
         thumbnails.push(url)
     } 
     
-    data.append("thumbnails", JSON.stringify(thumbnails))
+    const thumbs =  JSON.stringify(thumbnails)
     
    
-    if(data.get('title') === '' || data.get('description') === '' || data.get('code') === '' || data.get('price') === '' || data.get('status') === '' || data.get('stock') === '' || data.get('category') === ''  ){
+    if(title === '' || description === '' || code === '' || price === '' || status === '' || stock === '' || category === '' ){
         Swal.fire({
             title: 'Atencion',
             input: 'text',
@@ -28,16 +36,16 @@ form.addEventListener("submit", (event) =>{
         })
         
     }else{
-        
+       
         socket.emit("product", {
-            'title': data.get('title'),
-            'description': data.get('description'),
-            'code': data.get('code'),
-            'price': data.get('price'),
-            'status': data.get('status'),
-            'stock': data.get('stock'),
-            'category': data.get('category'),
-            'thumbnail': data.get('thumbnails'),
+            'title': title,
+            'description': description,
+            'code': code,
+            'price': price,
+            'status': status,
+            'stock': stock,
+            'category': category,
+            'thumbnail': thumbs,
         })
     }
 })
@@ -55,3 +63,4 @@ socket.on("message-server", data=>{
         allowOutsideClick: false
     })
 })
+ 

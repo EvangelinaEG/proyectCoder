@@ -1,7 +1,7 @@
 <main class="container">
     <h1>Gestor de productos</h1>
     <div >
-        <form class="form-control" method="post" action="realtimeproducto" enctype="multipart / form-data" id="producto" >
+        <form class="form-control" method="POST" action="/realtimeproductos" enctype="multipart/form-data" id="producto" >
             <div class="row">
                 <div class="col p-3">
                     <input class="form-control" type="text" name="title" id="title" placeholder="Ingrese un titulo" required />
@@ -28,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="col p-3">
-                    <select class="form-select" name="status" aria-label="Default select">
+                    <select class="form-select" name="status" aria-label="Default select" id="status">
                         <option selected disabled>Seleccione un estado</option>
                         <option value="true">Activo</option>
                         <option value="false">Inactivo</option>
@@ -38,7 +38,7 @@
                     <input class="form-control" type="file" name="thumbnail" id="thumbnail" multiple/>
                 </div>
             </div>
-            <input class="btn btn-primary" type="submit" value="Agregar producto">
+            <button class="btn btn-primary" type="submit">Agregar producto</button>
         </form>
         <div id="productos">
              {{#if contproducts}}

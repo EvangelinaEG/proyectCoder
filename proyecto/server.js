@@ -20,8 +20,8 @@ const httpServer = app.listen(8080, error => {
 })
 
 const io = new Server(httpServer)
-app.use(productsSocket(io))
 
+app.use(productsSocket(io))
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -39,6 +39,9 @@ app.use('/', viewsRouter)
 app.use('/api/carts', cartsRouter)
 
 app.use('/api/products', productsRouter)
+
+
+
 
 app.use((error, req, res, next) => {
     console.log(error)

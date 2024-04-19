@@ -3,6 +3,7 @@ import express from 'express'
 import ProductManager from '../file/productManager.js'
 const path = '../proyecto/file/Productos.json'
 import bodyParser from 'body-parser'
+//import productsSocket from '../utils/productsSocket.js'
 const router = Router()
 
 router.use(express.json())
@@ -17,28 +18,37 @@ const products = async () =>{
 }
 products();
 
-router.post('/realtimeproducto', async (req, res) => {
-    console.log(req.body.title)
+router.post('/realtimeproductos' , async (req, res) => {
+    try {
         const { socketServer } = req
+        const result = []
         socketServer.on('connection', socket => {
-            socket.on("product", async data=>{
-            const result = await Products.addProducts(data)
-            
-                socketServer.emit("message-server", result.msg)
+            socket.on('product', async data => {
+                 result = await Products.addProduct(data)
+                resutlt.push({id: socket.id, messge: result.msg})
             })
-        }) 
-        
-    }) 
+            socket.emit('message-server', result)    
+        })
 
-router.get('/realtimeproductos', async (req, res) => {
-    
-    const result = await Products.getProducts()
-    let keys = Object.keys(result);
-    if(  result.status == "error" ) return res.status(404).send({status: 'error', error: result.msg })
-    res.render('realTimeProducts', { 
-    "products": result.msg,
-    "contproducts" :  keys.length > 0
-    })
+       
+    }catch(err){
+        console.log(err)
+    }   
+})
+ 
+router.get('/realtimeproductos',async (req, res) => {
+    try {
+        const result = await Products.getProducts()
+        let keys = Object.keys(result);
+        if(  result.status == "error" ) return res.status(404).send({status: 'error', error: result.msg })
+        res.render('realTimeProducts', { 
+        "products": result.msg,
+        "contproducts" :  keys.length > 0
+        })
+        
+    }catch(err){
+        console.log(err)
+    }
 })
 
 router.get('/', async (req, res) => {
@@ -50,7 +60,6 @@ router.get('/', async (req, res) => {
     "contproducts" :  keys.length > 0
     })
 })
-
 
 
 
